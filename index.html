@@ -3,88 +3,376 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>I'm Sorry 💔</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="fetch.css">
+    <title>Product List</title>
 </head>
 
 <body>
-    <canvas id="background"></canvas>
+    <div style="display: flex; flex-direction: row; justify-content: space-between;">
 
-    <div class="bg-image"></div>
+        <select id="categoryFilter">
+            <option value="all">All Categories</option>
+            <option value="fragrances">Fragrances</option>
+            <option value="beauty">Beauty</option>
+            <option value="groceries">Groceries</option>
+            <option value="furniture">Furniture</option>
+        </select>
 
-    <div class="container">
-        <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Sorry GIF" class="gif">
-
-        <h1>I'm Sorry, My Love</h1>
-        <p>I never meant to hurt you. You mean the world to me. 💖</p>
-
-        <button onclick="goToNextPage()">Click here</button>
-
-        <div class="heart"></div>
+        <div class="filter-container">
+            <label for="price-range">Price Range:</label>
+            <div class="range-container" id="price-range-container">
+                <div class="range-background" id="range-background"></div>
+                <div class="handle" id="handle-min" style="left: 0"></div>
+                <div class="handle" id="handle-max" style="left: 380px"></div>
+            </div>
+            <div class="range-values">
+                <span id="min-value">$0</span> - <span id="max-value">$2500</span>
+            </div>
+        </div>
+    </div>
+    <div class="search-container">
+        <input type="text" id="searchInput" onkeypress="handleKeyPress(event)" placeholder="Search for products..." />
+        <button id="searchButton">Search</button>
     </div>
 
+    <h1>Product List</h1>
+    <div id="product"></div>
+
     <script>
-        // No alert now, just redirect to next page
-        function goToNextPage() {
-            window.location.href = 'next.html';
+
+        function handleKeyPress(event) {
+            const keyPressed = event.key;
+
+            if (keyPressed === 'Enter') {
+                filterProducts();
+            }
         }
 
-        // Canvas background animation (keep this part)
-        const canvas = document.getElementById('background');
-        const ctx = canvas.getContext('2d');
-        let width = window.innerWidth;
-        let height = window.innerHeight;
-        canvas.width = width;
-        canvas.height = height;
+        let products = [];
 
-        let points = [];
+        fetch('https://dummyjson.com/products')
+            .then(response => response.json())
+            .then(data => {
+                products = data.products;
+                displayProducts(products);
 
-        for (let i = 0; i < 100; i++) {
-            points.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                vx: (Math.random() - 0.5) * 0.5,
-                vy: (Math.random() - 0.5) * 0.5
+                // Set min and max price to $0 and $2500
+                const minPrice = 0;
+                const maxPrice = 2500;
+
+                // // Find min and max price based on the fetched products
+                // const minPrice = Math.min(...products.map(product => product.price));
+                // const maxPrice = Math.max(...products.map(product => product.price));
+
+                // Initialize the draggable range with dynamic price range values
+                initDraggableRange(minPrice, maxPrice);
+            })
+            .catch(error => console.error('Error fetching data:', error));
+
+        function displayProducts(productsToDisplay) {
+            const productsElement = document.getElementById("product");
+
+            let productList = '<div class="abc">';
+
+            productsToDisplay.forEach(product => {
+                const imagesHTML = product.images.map(image =>
+                    `<img src="${image}" alt="${product.title}" class="product-image">`
+                ).join('');
+
+                const productLink = `home.html?id=${product.id - 1}`;
+
+                productList += `
+                    <div class="card">
+                        <div class="inner_card"  onclick="navigateToProductPage('${productLink}')">
+                                <div class="product-images">${imagesHTML}</div>
+                                <hr>
+                                <h2>${product.title}</h2>
+                                <div>${product.description}</div>
+                                <div class="brand"><strong>Brand:</strong> ${product.brand}</div>
+                                <div class="price"><strong>Price:</strong> $${product.price}</div>
+                                <div class="rating"><strong>Rating:</strong> ${product.rating}</div>
+                        
+                        </div>
+                    </div>
+                `;
+            });
+
+            productList += '</div>';
+            productsElement.innerHTML = productList;
+        }
+
+        function navigateToProductPage(link) {
+            window.location.href = link;
+        }
+
+        function filterProducts() {
+            const selectedCategory = document.getElementById('categoryFilter').value;
+            const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+            let minPrice = parseInt(document.getElementById("min-value").textContent.replace('$', ''));
+            let maxPrice = parseInt(document.getElementById("max-value").textContent.replace('$', ''));
+
+            let filteredProducts = products;
+
+            if (selectedCategory !== 'all') {
+                filteredProducts = filteredProducts.filter(product => product.category === selectedCategory);
+            }
+
+            if (searchQuery) {
+                filteredProducts = filteredProducts.filter(product =>
+                    product.title.toLowerCase().includes(searchQuery) ||
+                    product.description.toLowerCase().includes(searchQuery)
+                );
+            }
+
+            filteredProducts = filteredProducts.filter(product => product.price >= minPrice && product.price <= maxPrice);
+            displayProducts(filteredProducts);
+        }
+
+        document.getElementById('categoryFilter').addEventListener('change', () => {
+            filterProducts();
+        });
+
+        document.getElementById('searchButton').addEventListener('click', () => {
+            filterProducts();
+        });
+
+        // Handle dragging logic
+        function initDraggableRange(minPrice, maxPrice) {
+            const rangeContainer = document.getElementById("price-range-container");
+            const handleMin = document.getElementById("handle-min");
+            const handleMax = document.getElementById("handle-max");
+            const rangeBackground = document.getElementById("range-background");
+            const minValue = document.getElementById("min-value");
+            const maxValue = document.getElementById("max-value");
+
+            let isDraggingMin = false;
+            let isDraggingMax = false;
+
+            // Initialize min/max display values
+            minValue.textContent = `$${minPrice}`;
+            maxValue.textContent = `$${maxPrice}`;
+
+            const rangeWidth = 400; // Width of the price range container
+
+            // Mouse down event for min handle
+            handleMin.addEventListener("mousedown", () => {
+                isDraggingMin = true;
+            });
+
+            // Mouse down event for max handle
+            handleMax.addEventListener("mousedown", () => {
+                isDraggingMax = true;
+            });
+
+            // Mouse move event to update the handles
+            rangeContainer.addEventListener("mousemove", (e) => {
+                if (isDraggingMin || isDraggingMax) {
+                    const containerRect = rangeContainer.getBoundingClientRect();
+                    let position = e.clientX - containerRect.left;
+                    position = Math.max(0, Math.min(position, rangeWidth)); // Constrain within range container
+
+                    if (isDraggingMin) {
+                        if (position < handleMax.offsetLeft) {
+                            handleMin.style.left = `${position}px`;
+                            let newMinPrice = Math.round((position / rangeWidth) * (maxPrice - minPrice) + minPrice);
+                            minValue.textContent = `$${newMinPrice}`;
+                            rangeBackground.style.left = `${position}px`;
+                            rangeBackground.style.width = `${handleMax.offsetLeft - position}px`;
+
+                            filterProducts();
+                        }
+                    } else if (isDraggingMax) {
+                        if (position > handleMin.offsetLeft) {
+                            handleMax.style.left = `${position}px`;
+                            let newMaxPrice = Math.round((position / rangeWidth) * (maxPrice - minPrice) + minPrice);
+                            maxValue.textContent = `$${newMaxPrice}`;
+                            rangeBackground.style.width = `${position - handleMin.offsetLeft}px`;
+
+                            filterProducts();
+                        }
+                    }
+                }
+            });
+
+            // Mouse up event to stop dragging
+            document.addEventListener("mouseup", () => {
+                isDraggingMin = false;
+                isDraggingMax = false;
             });
         }
 
-        function drawLines() {
-            ctx.clearRect(0, 0, width, height);
 
-            for (let i = 0; i < points.length; i++) {
-                let p1 = points[i];
-                p1.x += p1.vx;
-                p1.y += p1.vy;
+        function initDraggableRange(minPrice, maxPrice) {
+            const rangeContainer = document.getElementById("price-range-container");
+            const handleMin = document.getElementById("handle-min");
+            const handleMax = document.getElementById("handle-max");
+            const rangeBackground = document.getElementById("range-background");
+            const minValue = document.getElementById("min-value");
+            const maxValue = document.getElementById("max-value");
 
-                if (p1.x < 0 || p1.x > width) p1.vx *= -1;
-                if (p1.y < 0 || p1.y > height) p1.vy *= -1;
+            let isDraggingMin = false;
+            let isDraggingMax = false;
 
-                for (let j = i + 1; j < points.length; j++) {
-                    let p2 = points[j];
-                    let dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-                    if (dist < 100) {
-                        ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 100, 100, ${1 - dist / 100})`;
-                        ctx.moveTo(p1.x, p1.y);
-                        ctx.lineTo(p2.x, p2.y);
-                        ctx.stroke();
+            minValue.textContent = `$${minPrice}`;
+            maxValue.textContent = `$${maxPrice}`;
+
+            // Mousedown events
+            handleMin.addEventListener("mousedown", () => {
+                isDraggingMin = true;
+            });
+
+            handleMax.addEventListener("mousedown", () => {
+                isDraggingMax = true;
+            });
+
+            // Mousemove events
+            rangeContainer.addEventListener("mousemove", (e) => {
+                if (isDraggingMin || isDraggingMax) {
+                    const rangeWidth = getRangeWidth(); // ✅ DYNAMIC WIDTH
+                    const containerRect = rangeContainer.getBoundingClientRect();
+                    let position = e.clientX - containerRect.left;
+                    position = Math.max(0, Math.min(position, rangeWidth));
+
+                    if (isDraggingMin) {
+                        if (position < handleMax.offsetLeft) {
+                            handleMin.style.left = `${position}px`;
+                            let newMinPrice = Math.round((position / rangeWidth) * (maxPrice - minPrice) + minPrice);
+                            minValue.textContent = `$${newMinPrice}`;
+                            rangeBackground.style.left = `${position}px`;
+                            rangeBackground.style.width = `${handleMax.offsetLeft - position}px`;
+
+                            filterProducts();
+                        }
+                    } else if (isDraggingMax) {
+                        if (position > handleMin.offsetLeft) {
+                            handleMax.style.left = `${position}px`;
+                            let newMaxPrice = Math.round((position / rangeWidth) * (maxPrice - minPrice) + minPrice);
+                            maxValue.textContent = `$${newMaxPrice}`;
+                            rangeBackground.style.width = `${position - handleMin.offsetLeft}px`;
+
+                            filterProducts();
+                        }
                     }
                 }
-            }
+            });
 
-            requestAnimationFrame(drawLines);
+            document.addEventListener("mouseup", () => {
+                isDraggingMin = false;
+                isDraggingMax = false;
+            });
         }
 
-        drawLines();
+        function getRangeWidth() {
+            return document.getElementById("price-range-container").offsetWidth;
+        }
 
-        window.addEventListener('resize', () => {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-        });
+
+
+        // // Mobile touch
+        // handleMin.addEventListener("touchstart", () => {
+        //     isDraggingMin = true;
+        // }, { passive: true });
+
+        // handleMax.addEventListener("touchstart", () => {
+        //     isDraggingMax = true;
+        // }, { passive: true });
+
+        // rangeContainer.addEventListener("touchmove", (e) => {
+        //     if (isDraggingMin || isDraggingMax) {
+        //         const touch = e.touches[0];
+        //         const rangeWidth = getRangeWidth();
+        //         const containerRect = rangeContainer.getBoundingClientRect();
+        //         let position = touch.clientX - containerRect.left;
+        //         position = Math.max(0, Math.min(position, rangeWidth));
+
+        //         if (isDraggingMin) {
+        //             if (position < handleMax.offsetLeft) {
+        //                 handleMin.style.left = `${position}px`;
+        //                 let newMinPrice = Math.round((position / rangeWidth) * (maxPrice - minPrice) + minPrice);
+        //                 minValue.textContent = `$${newMinPrice}`;
+        //                 rangeBackground.style.left = `${position}px`;
+        //                 rangeBackground.style.width = `${handleMax.offsetLeft - position}px`;
+
+        //                 filterProducts();
+        //             }
+        //         } else if (isDraggingMax) {
+        //             if (position > handleMin.offsetLeft) {
+        //                 handleMax.style.left = `${position}px`;
+        //                 let newMaxPrice = Math.round((position / rangeWidth) * (maxPrice - minPrice) + minPrice);
+        //                 maxValue.textContent = `$${newMaxPrice}`;
+        //                 rangeBackground.style.width = `${position - handleMin.offsetLeft}px`;
+
+        //                 filterProducts();
+        //             }
+        //         }
+        //     }
+        // }, { passive: true });
+
+        // document.addEventListener("touchend", () => {
+        //     isDraggingMin = false;
+        //     isDraggingMax = false;
+        // }, { passive: true });
+
+
+
+        // // Start dragging with touch
+        // handleMin.addEventListener("touchstart", () => {
+        //     isDraggingMin = true;
+        // }, { passive: true });
+
+        // handleMax.addEventListener("touchstart", () => {
+        //     isDraggingMax = true;
+        // }, { passive: true });
+
+        // // Move dragging with touch
+        // rangeContainer.addEventListener("touchmove", (e) => {
+        //     if (isDraggingMin || isDraggingMax) {
+        //         const touch = e.touches[0];
+        //         const rangeWidth = getRangeWidth();
+        //         const containerRect = rangeContainer.getBoundingClientRect();
+        //         let position = touch.clientX - containerRect.left;
+        //         position = Math.max(0, Math.min(position, rangeWidth));
+
+        //         if (isDraggingMin) {
+        //             if (position < handleMax.offsetLeft) {
+        //                 handleMin.style.left = `${position}px`;
+        //                 let newMinPrice = Math.round((position / rangeWidth) * (maxPrice - minPrice) + minPrice);
+        //                 minValue.textContent = `$${newMinPrice}`;
+        //                 rangeBackground.style.left = `${position}px`;
+        //                 rangeBackground.style.width = `${handleMax.offsetLeft - position}px`;
+
+        //                 filterProducts();
+        //             }
+        //         } else if (isDraggingMax) {
+        //             if (position > handleMin.offsetLeft) {
+        //                 handleMax.style.left = `${position}px`;
+        //                 let newMaxPrice = Math.round((position / rangeWidth) * (maxPrice - minPrice) + minPrice);
+        //                 maxValue.textContent = `$${newMaxPrice}`;
+        //                 rangeBackground.style.width = `${position - handleMin.offsetLeft}px`;
+
+        //                 filterProducts();
+        //             }
+        //         }
+        //     }
+        // }, { passive: true });
+
+        // // Stop dragging with touch
+        // document.addEventListener("touchend", () => {
+        //     isDraggingMin = false;
+        //     isDraggingMax = false;
+        // }, { passive: true });
+
+
+
+
+        function goToProductPage(productId) {
+            window.location.href = `home.html`;
+        }
+
 
     </script>
+
 </body>
 
 </html>
