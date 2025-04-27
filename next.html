@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>I Love You ❤️</title>
+    <link rel="stylesheet" href="next-style.css">
+</head>
+
+<body>
+    <div class="love-container">
+        <h1>I Love You Forever ❤️</h1>
+
+        <p id="typed-text"></p>
+
+        <img src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" alt="Love GIF" class="love-gif">
+
+        <a href="index.html" class="back-button">Back to Home</a> 
+
+        <!-- Background Music -->
+        <audio id="bg-music" autoplay loop>
+            <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <a href="index.html" class="back-button">Back to Home</a>
+
+        <canvas id="heartsCanvas"></canvas>
+        <script>
+            // Canvas setup
+            const canvas = document.getElementById('heartsCanvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const hearts = [];
+
+            for (let i = 0; i < 50; i++) {
+                hearts.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 20 + 10,
+                    speed: Math.random() * 1 + 0.5,
+                    opacity: Math.random() * 0.5 + 0.5
+                });
+            }
+
+            function drawHeart(x, y, size, opacity) {
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.scale(size / 100, size / 100);
+                ctx.beginPath();
+                ctx.moveTo(75, 40);
+                ctx.bezierCurveTo(75, 37, 70, 25, 50, 25);
+                ctx.bezierCurveTo(20, 25, 20, 62.5, 20, 62.5);
+                ctx.bezierCurveTo(20, 80, 40, 102, 75, 120);
+                ctx.bezierCurveTo(110, 102, 130, 80, 130, 62.5);
+                ctx.bezierCurveTo(130, 62.5, 130, 25, 100, 25);
+                ctx.bezierCurveTo(85, 25, 75, 37, 75, 40);
+                ctx.closePath();
+                ctx.fillStyle = `rgba(255, 105, 180, ${opacity})`; // Pinkish hearts
+                ctx.fill();
+                ctx.restore();
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                hearts.forEach(heart => {
+                    drawHeart(heart.x, heart.y, heart.size, heart.opacity);
+                    heart.y += heart.speed;
+                    if (heart.y > canvas.height) {
+                        heart.y = -heart.size;
+                        heart.x = Math.random() * canvas.width;
+                    }
+                });
+                requestAnimationFrame(animate);
+            }
+
+            animate();
+
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+
+            // Typing Animation
+            const text = "You are my everything. Thank you for being in my life. 🌸";
+            let index = 0;
+            const speed = 70; // typing speed (lower = faster)
+
+            function typeWriter() {
+                if (index < text.length) {
+                    document.getElementById("typed-text").innerHTML += text.charAt(index);
+                    index++;
+                    setTimeout(typeWriter, speed);
+                }
+            }
+
+            window.onload = function () {
+                typeWriter();
+            };
+
+        </script>
+    </div>
+</body>
+
+</html>

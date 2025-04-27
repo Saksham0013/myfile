@@ -1,0 +1,239 @@
+/* body {
+    margin: 0;
+    background: linear-gradient(to right, #ff758c, #ff7eb3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: white;
+    text-align: center;
+}
+
+.love-container {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+}
+
+.love-gif {
+    width: 250px;
+    height: auto;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background: white;
+    color: #ff4b69;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.back-button:hover {
+    background: #ffe3e8;
+}
+
+#heartsCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -2;
+} */
+
+/* body {
+    margin: 0;
+    background: linear-gradient(to right, #ff758c, #ff7eb3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    color: white;
+    position: relative;
+}
+
+#heartsCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -2;
+}
+
+.love-container {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    backdrop-filter: blur(8px);
+    z-index: 1;
+}
+
+h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+#typed-text {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+.love-gif {
+    width: 250px;
+    height: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.back-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background: white;
+    color: #ff4b69;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    margin-top: 20px
+}
+
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+
+.love-gif {
+    width: 250px;
+    height: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+    animation: float 3s ease-in-out infinite;
+} */
+
+
+/* Body setup to center everything */
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: linear-gradient(to right, #ff758c, #ff7eb3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+/* The canvas for falling hearts */
+#heartsCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: -2;
+}
+
+/* Container for all text and gif */
+.love-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+/* Heading */
+h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+/* Typing text */
+#typed-text {
+    font-size: 1.5em;
+    margin-bottom: 30px;
+    color: #fff;
+}
+
+/* Floating animation for the gif */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* GIF setup */
+.love-gif {
+    width: 250px;
+    height: auto;
+    margin-bottom: 30px;
+    animation: float 3s ease-in-out infinite;
+    border-radius: 15px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Back button */
+.back-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background: white;
+    color: #ff4b69;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.back-button:hover {
+    background: #ffe3e8;
+}
+
+
+

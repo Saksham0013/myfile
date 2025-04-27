@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>I'm Sorry 💔</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <canvas id="background"></canvas>
+
+    <div class="bg-image"></div>
+
+    <div class="container">
+        <img src="https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif" alt="Sorry GIF" class="gif">
+
+        <h1>I'm Sorry, My Love</h1>
+        <p>I never meant to hurt you. You mean the world to me. 💖</p>
+
+        <button onclick="goToNextPage()">Click here</button>
+
+        <div class="heart"></div>
+    </div>
+
+    <script>
+        // No alert now, just redirect to next page
+        function goToNextPage() {
+            window.location.href = 'next.html';
+        }
+
+        // Canvas background animation (keep this part)
+        const canvas = document.getElementById('background');
+        const ctx = canvas.getContext('2d');
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+
+        let points = [];
+
+        for (let i = 0; i < 100; i++) {
+            points.push({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5
+            });
+        }
+
+        function drawLines() {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < points.length; i++) {
+                let p1 = points[i];
+                p1.x += p1.vx;
+                p1.y += p1.vy;
+
+                if (p1.x < 0 || p1.x > width) p1.vx *= -1;
+                if (p1.y < 0 || p1.y > height) p1.vy *= -1;
+
+                for (let j = i + 1; j < points.length; j++) {
+                    let p2 = points[j];
+                    let dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+                    if (dist < 100) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(255, 100, 100, ${1 - dist / 100})`;
+                        ctx.moveTo(p1.x, p1.y);
+                        ctx.lineTo(p2.x, p2.y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(drawLines);
+        }
+
+        drawLines();
+
+        window.addEventListener('resize', () => {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        });
+
+    </script>
+</body>
+
+</html>
