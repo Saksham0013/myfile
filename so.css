@@ -1,0 +1,142 @@
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: url(background1.jpg);
+    font-family: 'Arial', sans-serif;
+    overflow: hidden;
+}
+
+.card {
+    width: 400px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    position: relative;
+    animation: fadeIn 1s ease-in-out;
+}
+
+.card-header {
+    background: url('back.webp');
+    background-size: cover;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.card-header h1 {
+    color: #fff;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    margin: 0;
+}
+
+.card-body {
+    padding: 20px;
+    text-align: center;
+}
+
+.card-body p {
+    font-size: 1.2em;
+    color: #333;
+    line-height: 1.6;
+    margin: 0 0 20px;
+}
+
+.heart {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: #ff4d4d;
+    transform: rotate(45deg);
+    animation: float 4s infinite;
+    opacity: 0.7;
+}
+
+.heart::before,
+.heart::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    background: #ff4d4d;
+    border-radius: 50%;
+    position: absolute;
+}
+
+.heart::before {
+    top: -10px;
+    left: 0;
+}
+
+.heart::after {
+    top: 0;
+    left: -10px;
+}
+
+.button {
+    background: #ff4d4d;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.button:hover {
+    background: #e03c3c;
+}
+
+img{
+    height: auto;
+    width: 200px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) rotate(45deg);
+        opacity: 0.7;
+    }
+
+    50% {
+        transform: translateY(-100px) rotate(45deg);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(-200px) rotate(45deg);
+        opacity: 0;
+    }
+}
+
+@media (max-width: 500px) {
+    .card {
+        width: 90%;
+    }
+
+    .card-header h1 {
+        font-size: 2em;
+    }
+
+    .card-body p {
+        font-size: 1em;
+    }
+}
