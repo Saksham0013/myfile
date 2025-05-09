@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+
+body {
+    background: linear-gradient(135deg, #2b1e66, #4a3b9e);
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+    padding: 20px;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.card {
+    background: linear-gradient(145deg, #ffffff, #f0f0f5);
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    flex: 0 0 30%;
+    min-width: 280px;
+    max-width: 400px;
+    margin: 20px 0;
+    padding: 25px;
+    text-align: center;
+    transition: transform 0.4s ease, opacity 0.6s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.1), transparent 70%);
+    pointer-events: none;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+.card h1 {
+    font-family: 'Playfair Display', serif;
+    color: #d4af37;
+    font-size: 28px;
+    margin-bottom: 15px;
+    text-transform: capitalize;
+    letter-spacing: 1.5px;
+    font-weight: 700;
+}
+
+.card p {
+    color: #2b2b2b;
+    font-size: 16px;
+    line-height: 1.8;
+    margin: 12px 0;
+    font-weight: 300;
+}
+
+.gif-container {
+    margin: 20px 0;
+    padding: 10px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+}
+
+.gif-container img {
+    max-width: 100%;
+    border-radius: 10px;
+    border: 3px solid #d4af37;
+    transition: transform 0.3s ease;
+}
+
+.gif-container img:hover {
+    transform: scale(1.05);
+}
+
+.confetti {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    background: #ff0;
+    opacity: 0.9;
+    animation: fall 4s linear infinite;
+    pointer-events: none;
+    border-radius: 50%;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100vh) rotate(0deg);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+.wish-button {
+    background: linear-gradient(90deg, #d4af37, #b8972e);
+    color: #fff;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 15px;
+    transition: background 0.3s ease, transform 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.wish-button:hover {
+    background: linear-gradient(90deg, #b8972e, #d4af37);
+    transform: scale(1.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .card {
+        max-width: 90%;
+        padding: 20px;
+    }
+
+    .card h1 {
+        font-size: 24px;
+    }
+
+    .card p {
+        font-size: 14px;
+    }
+
+    .gif-container img {
+        max-height: 200_px;
+    }
+
+    .wish-button {
+        padding: 10px 25px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    .card {
+        max-width: 100%;
+        margin: 15px 0;
+        padding: 15px;
+    }
+
+    .card h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+    }
+
+    .card p {
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .gif-container {
+        margin: 15px 0;
+        padding: 8px;
+    }
+
+    .gif-container img {
+        max-height: 150px;
+    }
+
+    .wish-button {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+
+    .confetti {
+        width: 8px;
+        height: 8px;
+    }
+}
