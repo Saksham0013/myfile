@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Universe Begins With You 💖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(to right, #ffdde1, #ee9ca7);
+      color: #5c0e3a;
+      position: relative;
+    }
+
+    .container {
+      width: 100%;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      padding: 30px 15px;
+      text-align: center;
+      animation: fadeIn 1.5s ease-in-out forwards;
+      position: relative;
+      z-index: 1;
+    }
+
+    h1, h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      color: #c2185b;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+
+    button {
+      background: #ff69b4;
+      color: white;
+      border: none;
+      padding: 14px 30px;
+      margin-top: 20px;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      max-width: 90vw;
+    }
+
+    button:hover {
+      transform: scale(1.08);
+      background-color: #ff4081;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .card-grid, .photo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .card, .photo-grid div {
+      background: white;
+      border-radius: 20px;
+      padding: 20px;
+      width: 90vw;
+      max-width: 220px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover, .photo-grid div:hover {
+      transform: translateY(-10px);
+    }
+
+    img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .yes {
+      background: #00c853;
+    }
+
+    .no {
+      background: #f44336;
+    }
+
+    @media screen and (max-width: 600px) {
+      h1, h2 {
+        font-size: 2rem;
+      }
+      p {
+        font-size: 1rem;
+      }
+      button {
+        font-size: 0.95rem;
+        padding: 12px 24px;
+      }
+    }
+
+    /* Falling Hearts */
+    .heart {
+      position: fixed;
+      top: -10px;
+      font-size: 24px;
+      color: #ff4d6d;
+      animation: fall 7s linear infinite;
+      z-index: 0;
+      opacity: 0.7;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(-10px) rotate(0deg); opacity: 0; }
+      30% { opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Falling Hearts -->
+  <script>
+    const heartCount = 30;
+    for (let i = 0; i < heartCount; i++) {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.textContent = '💖';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.fontSize = (Math.random() * 10 + 20) + 'px';
+      heart.style.animationDuration = (Math.random() * 5 + 5) + 's';
+      document.body.appendChild(heart);
+    }
+  </script>
+
+  <div class="container">
+    <section class="landing">
+      <h1>My Universe Begins With You 💖</h1>
+      <p>Hi Priyanka 🥺</p>
+      <p>Happy Girlfriend Day, Priyanka! This one's only for <strong>YOU</strong> 💕</p>
+      <button onclick="showSection('reasons')">Let’s Begin the Journey 🌙</button>
+    </section>
+
+    <section id="reasons" class="hidden">
+      <h2>Reasons Why You're the Best ✨</h2>
+      <div class="card-grid">
+        <div class="card">You care like no one else. 💕</div>
+        <div class="card">You’re my biggest cheerleader. ❤️</div>
+        <div class="card">You're effortlessly cute & hot 😍</div>
+      </div>
+      <button onclick="showSection('photos')">More Reasons Ahead 👉</button>
+    </section>
+
+    <section id="photos" class="hidden">
+      <h2>Our Moments Together 📸</h2>
+      <div class="photo-grid">
+        <div><img src="images/images1.jpeg" /><p>First date magic 🌟</p></div>
+        <div><img src="images/image2.jpeg" /><p>That smile that stole my heart</p></div>
+        <div><img src="images/images3.jpeg" /><p>Butterflies every single time</p></div>
+      </div>
+      <button onclick="showSection('question')">Ready for the Surprise? 💘</button>
+    </section>
+
+    <section id="question" class="hidden">
+      <h2>One Question for You... 💍</h2>
+      <p>Will you always be my girl forever and ever? 💍🌸</p>
+      <button class="yes">✅ Yes, my love 😘</button>
+      <button class="no">❌ Try again with a kiss 😚</button>
+    </section>
+  </div>
+
+  <script>
+    function showSection(id) {
+      document.querySelectorAll("section").forEach(section => {
+        section.classList.add("hidden");
+      });
+      document.getElementById(id).classList.remove("hidden");
+    }
+  </script>
+</body>
+</html>
